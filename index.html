@@ -18,6 +18,7 @@
       justify-content: center;
       min-height: 100vh;
       text-align: center;
+      padding: 20px;
     }
 
     .logo {
@@ -36,7 +37,7 @@
       font-size: 1.2em;
       color: #cccccc;
       max-width: 600px;
-      margin-bottom: 40px;
+      margin-bottom: 20px;
     }
 
     .btn, .lang-btn {
@@ -64,9 +65,15 @@
       right: 20px;
     }
 
+    #contract {
+      font-size: 0.95em;
+      color: #aaa;
+      word-break: break-all;
+      margin-top: 30px;
+    }
+
     footer {
-      position: absolute;
-      bottom: 20px;
+      margin-top: 40px;
       font-size: 0.9em;
       color: #777;
     }
@@ -78,12 +85,15 @@
 
       p {
         font-size: 1em;
-        padding: 0 20px;
       }
 
       .lang-switch {
         top: 10px;
         right: 10px;
+      }
+
+      #contract {
+        font-size: 0.85em;
       }
     }
   </style>
@@ -91,8 +101,8 @@
 <body>
 
   <div class="lang-switch">
-    <button class="lang-btn" onclick="setLanguage('fr')">FR</button>
-    <button class="lang-btn" onclick="setLanguage('en')">EN</button>
+    <button class="lang-btn" onclick="setLanguage('fr')" aria-label="Changer la langue en français">FR</button>
+    <button class="lang-btn" onclick="setLanguage('en')" aria-label="Switch language to English">EN</button>
   </div>
 
   <img src="icon-192.png" alt="Logo FRN" class="logo" />
@@ -104,6 +114,11 @@
 
   <a href="https://mlameche01.github.io/trancnumerique/" class="btn" id="walletBtn">Accéder au Wallet FRN</a>
 
+  <div id="contract">
+    <strong id="contractLabel">Adresse du contrat FRN :</strong><br>
+    <code>0x64e73E00a9d37188C0e25EC5cfdDCD856Ad7a77D</code>
+  </div>
+
   <footer>
     &copy; 2025 Franc Numérique. Réseau XODEX.
   </footer>
@@ -113,23 +128,36 @@
       fr: {
         title: "Franc Numérique (FRN)",
         description: "Le Franc Numérique est un token conçu pour l'économie numérique sur le réseau XODEX. Sécurisé, rapide et sans frais, il est accessible à tous.",
-        walletBtn: "Accéder au Wallet FRN"
+        walletBtn: "Accéder au Wallet FRN",
+        contractLabel: "Adresse du contrat FRN :"
       },
       en: {
         title: "Digital Franc (FRN)",
         description: "The Digital Franc is a token designed for the digital economy on the XODEX network. Secure, fast and gasless, it is accessible to all.",
-        walletBtn: "Access FRN Wallet"
+        walletBtn: "Access FRN Wallet",
+        contractLabel: "FRN Token Contract Address:"
       }
     };
 
     function setLanguage(lang) {
-      document.getElementById('title').innerText = translations[lang].title;
-      document.getElementById('description').innerText = translations[lang].description;
-      document.getElementById('walletBtn').innerText = translations[lang].walletBtn;
+      localStorage.setItem('lang', lang);
+      applyLanguage(lang);
+    }
+
+    function applyLanguage(lang) {
+      const t = translations[lang] || translations['fr'];
+      document.getElementById('title').innerText = t.title;
+      document.getElementById('description').innerText = t.description;
+      document.getElementById('walletBtn').innerText = t.walletBtn;
+      document.getElementById('contractLabel').innerText = t.contractLabel;
       document.documentElement.lang = lang;
     }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const lang = localStorage.getItem('lang') || 'fr';
+      applyLanguage(lang);
+    });
   </script>
 
 </body>
 </html>
-
