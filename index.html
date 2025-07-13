@@ -113,6 +113,7 @@
   </p>
 
   <a href="https://mlameche01.github.io/trancnumerique/" class="btn" id="walletBtn">Accéder au Wallet FRN</a>
+  <button class="btn" onclick="addToMetaMask()">Ajouter à MetaMask</button>
 
   <div id="contract">
     <strong id="contractLabel">Adresse du contrat FRN :</strong><br>
@@ -157,6 +158,50 @@
       const lang = localStorage.getItem('lang') || 'fr';
       applyLanguage(lang);
     });
+
+    async function addToMetaMask() {
+      if (typeof window.ethereum === 'undefined') {
+        alert("MetaMask n'est pas détecté.");
+        return;
+      }
+
+      const xodexParams = {
+        chainId: '0x29A', // 666 en hex
+        chainName: 'XODEX',
+        nativeCurrency: {
+          name: 'XODEX',
+          symbol: 'XOD',
+          decimals: 18
+        },
+        rpcUrls: ['https://mainnet.xo-dex.com/rpc'],
+        blockExplorerUrls: ['https://explorer.xo-dex.com']
+      };
+
+      const tokenAddress = '0x64e73E00a9d37188C0e25EC5cfdDCD856Ad7a77D';
+
+      try {
+        await ethereum.request({
+          method: 'wallet_addEthereumChain',
+          params: [xodexParams]
+        });
+
+        await ethereum.request({
+          method: 'wallet_watchAsset',
+          params: {
+            type: 'ERC20',
+            options: {
+              address: tokenAddress,
+              symbol: 'FRN',
+              decimals: 18,
+              image: location.origin + '/icon-192.png'
+            }
+          }
+        });
+      } catch (error) {
+        console.error('Erreur MetaMask :', error);
+        alert("Une erreur est survenue lors de l'ajout à MetaMask.");
+      }
+    }
   </script>
 
 </body>
